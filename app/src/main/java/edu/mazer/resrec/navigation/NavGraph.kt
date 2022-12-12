@@ -19,7 +19,7 @@ fun NavGraph(
         composable(
             route = NavigationRoutes.loginScreen.route
         ){
-            LoginScreen()
+            LoginScreen(navController)
         }
 
         composable(
