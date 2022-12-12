@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "197701475565",
+    "project_id": "kursovaya-5fdc1",
+    "storage_bucket": "kursovaya-5fdc1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197701475565:android:8d550a945f6c8f9a3000e4",
+        "android_client_info": {
+          "package_name": "edu.mazer.resrec"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "197701475565-3pun4ksoue2baas80umd686k8hi5mvhb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAM6kXJorapsks1R2T9jt6JZEuyaLtzvms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "197701475565-3pun4ksoue2baas80umd686k8hi5mvhb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
