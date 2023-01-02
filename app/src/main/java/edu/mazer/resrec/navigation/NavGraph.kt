@@ -6,6 +6,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import edu.mazer.resrec.ui.screens.add_order.AddOrderScreen
 import edu.mazer.resrec.ui.screens.home.HomeScreen
 import edu.mazer.resrec.ui.screens.login.LoginScreen
 import edu.mazer.resrec.ui.screens.settings.SettingsScreen
@@ -25,13 +26,19 @@ fun NavGraph(
         composable(
             route = NavigationRoutes.homeScreen.route
         ){
-            HomeScreen()
+            HomeScreen(navController)
         }
 
         composable(
             route = NavigationRoutes.settingsScreen.route
         ){
-            SettingsScreen()
+            SettingsScreen(navController)
+        }
+
+        composable(
+            route = NavigationRoutes.addOrder.route
+        ){
+            AddOrderScreen(navController)
         }
     }
 }

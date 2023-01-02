@@ -89,7 +89,7 @@ fun LoginScreen(
                     Icon(imageVector = Icons.Default.Password, contentDescription = "Password")
                 },
                 label = {
-                    Text("Enter login...")
+                    Text("Enter password...")
                 },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
