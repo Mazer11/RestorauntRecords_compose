@@ -20,7 +20,9 @@ fun SettingsScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             SettingsTopAppBar(
-                onBackPressed = { navController.navigate(NavigationRoutes.homeScreen.route) }
+                onBackPressed = {
+                    navController.popBackStack()
+                }
             )
         }
     ) {

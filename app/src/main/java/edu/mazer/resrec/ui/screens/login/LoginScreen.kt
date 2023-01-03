@@ -17,6 +17,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
 import edu.mazer.resrec.navigation.NavigationRoutes
 import kotlinx.coroutines.launch
 
@@ -78,7 +79,9 @@ fun LoginScreen(
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(all = 16.dp).fillMaxWidth(),
+                modifier = Modifier
+                    .padding(all = 16.dp)
+                    .fillMaxWidth(),
             ) {
                 TextField(
                     value = userLogin.value,
@@ -140,12 +143,13 @@ fun LoginScreen(
 
                 Button(
                     onClick = {
-                        if (!isUserLoginValid && !isPasswordValid)
+                        if (isUserLoginValid && isPasswordValid) {
+                            navController.popBackStack()
+                            navController.navigate(route = NavigationRoutes.homeScreen.route,)
+                        } else
                             scope.launch {
                                 snackBatHostState.showSnackbar("Wrong credentials")
                             }
-                        else
-                            navController.navigate(NavigationRoutes.homeScreen.route)
                     },
                 ) {
                     Text(text = "Sign In")
