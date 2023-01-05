@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.sharp.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -49,7 +48,7 @@ fun HomeScreen(navController: NavController) {
         modifier = Modifier.fillMaxSize(),
         topBar = {
             HomeTopApp(
-                title = "User name",
+                title = "Имя пользователя",
                 onIconButtonClick = {
                     navController.navigate(NavigationRoutes.settingsScreen.route)
                 },

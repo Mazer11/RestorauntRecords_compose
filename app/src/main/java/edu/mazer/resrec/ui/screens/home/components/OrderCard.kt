@@ -15,11 +15,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.compose.ResRecTheme
-import edu.mazer.resrec.model.Dish
+import edu.mazer.resrec.R
 import edu.mazer.resrec.model.Order
 import edu.mazer.resrec.ui.theme.AppTypography
 
@@ -70,7 +69,7 @@ fun OrderCard(
                     style = AppTypography.titleLarge
                 )
                 Text(
-                    text = "${order.cost} руб.",
+                    text = "${order.cost}" + stringResource(R.string.rub),
                     style = AppTypography.titleLarge
                 )
             }
@@ -100,7 +99,7 @@ fun OrderCard(
                 )
         }
         Text(
-            text = "Примечание: ${order.note}",
+            text = stringResource(R.string.note) + " " + order.note,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
@@ -112,15 +111,6 @@ fun OrderCard(
                 Text(
                     text = "${dish.key} x ${dish.value}",
                     modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp)
-                )
-                Divider(
-                    thickness = 0.5.dp,
-                    modifier = Modifier.padding(
-                        top = 2.dp,
-                        bottom = 4.dp,
-                        start = 8.dp,
-                        end = 8.dp
-                    )
                 )
             }
         }
@@ -136,7 +126,7 @@ fun OrderCard(
                     },
                     modifier = Modifier.padding(vertical = 8.dp, horizontal = 8.dp)
                 ) {
-                    Text(text = "Готово")
+                    Text(text = stringResource(R.string.done))
                 }
 
                 Button(
@@ -147,9 +137,9 @@ fun OrderCard(
                 ) {
                     Text(
                         text = if (orderDetailsDialogState.value)
-                            "Свернуть"
+                            stringResource(R.string.hide_details)
                         else
-                            "Раскрыть"
+                            stringResource(R.string.show_details)
                     )
                 }
             }
@@ -176,64 +166,22 @@ fun OrderConfirmation(
         onDismissRequest = { onDismiss() },
         confirmButton = {
             Button(onClick = { onConfirm() }) {
-                Text(text = "Confirm")
+                Text(text = stringResource(R.string.confirm))
             }
         },
         dismissButton = {
             OutlinedButton(onClick = { onDismiss() }) {
-                Text(text = "Cancel")
+                Text(text = stringResource(R.string.cancel))
             }
         },
         icon = {
             Icon(imageVector = Icons.Default.CheckCircle, contentDescription = "Confirmation icon")
         },
         title = {
-            Text(text = "Confirmation")
+            Text(text = stringResource(R.string.confirmation))
         },
         text = {
-            Text(text = "Are you sure that order №$orderId is done?")
+            Text(text = stringResource(R.string.are_you_sure) + orderId + stringResource(R.string.ready_question))
         }
     )
 }
-
-@Preview
-@Composable
-fun OrderCardPrev() {
-
-    val testOrder = Order(
-        id = "0001",
-        status = "Готовится",
-        time = "16:33",
-        table = 4,
-        cost = 785,
-        dishes = mutableListOf(
-            Dish(
-                key = "Картофель фри",
-                value = 2
-            ),
-            Dish(
-                key = "Кола бол.",
-                value = 2
-            ),
-            Dish(
-                key = "Гамбургер",
-                value = 2
-            )
-        ),
-        waiter = "Иванов И.И.",
-        note = "Стандартно"
-    )
-
-    ResRecTheme() {
-        OrderCard(order = testOrder)
-    }
-}
-
-
-
-
-
-
-
-
-
