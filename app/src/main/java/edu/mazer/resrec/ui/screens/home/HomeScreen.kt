@@ -12,11 +12,39 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import edu.mazer.resrec.model.Dish
+import edu.mazer.resrec.model.Order
 import edu.mazer.resrec.navigation.NavigationRoutes
+import edu.mazer.resrec.ui.screens.home.components.OrderCard
 
 @ExperimentalMaterial3Api
 @Composable
 fun HomeScreen(navController: NavController) {
+
+    val testOrder = Order(
+        id = "0001",
+        status = "Готовится",
+        time = "16:33",
+        table = 4,
+        cost = 785,
+        dishes = mutableListOf(
+            Dish(
+                key = "Картофель фри",
+                value = 2
+            ),
+            Dish(
+                key = "Кола бол.",
+                value = 2
+            ),
+            Dish(
+                key = "Гамбургер",
+                value = 2
+            )
+        ),
+        waiter = "Иванов И.И.",
+        note = "стандартно"
+    )
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -44,7 +72,7 @@ fun HomeScreen(navController: NavController) {
         Column(
             modifier = Modifier.padding(it)
         ) {
-            Text(text = "HOME SCREEN")
+            OrderCard(testOrder)
         }
     }
 }
