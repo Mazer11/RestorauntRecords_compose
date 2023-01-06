@@ -10,6 +10,7 @@ import edu.mazer.resrec.ui.screens.add_order.AddOrderScreen
 import edu.mazer.resrec.ui.screens.home.HomeScreen
 import edu.mazer.resrec.ui.screens.login.LoginScreen
 import edu.mazer.resrec.ui.screens.settings.SettingsScreen
+import edu.mazer.resrec.viewmodels.DishSearchViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +43,11 @@ fun NavGraph(
         composable(
             route = NavigationRoutes.addOrder.route
         ){
-            AddOrderScreen(navController)
+            val dishVm = DishSearchViewModel()
+            AddOrderScreen(
+                navController,
+                dishVm
+            )
         }
     }
 }

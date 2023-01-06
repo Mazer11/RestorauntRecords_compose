@@ -6,7 +6,7 @@ data class Order(
     val time: String,
     val table: Int,
     val cost: Int,
-    val dishes: MutableList<Dish>,
+    val dishes: MutableList<DishInOrder>,
     val waiter: String,
     val note: String
 )

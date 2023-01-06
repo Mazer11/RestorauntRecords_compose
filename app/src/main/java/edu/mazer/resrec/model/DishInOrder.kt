@@ -1,6 +1,6 @@
 package edu.mazer.resrec.model
 
-data class Dish(
+data class DishInOrder(
     val key: String,
-    val value: Int
+    val count: Int,
 )

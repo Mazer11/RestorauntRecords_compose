@@ -1,9 +1,9 @@
 package edu.mazer.resrec.ui.screens.home
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import edu.mazer.resrec.model.Dish
+import edu.mazer.resrec.model.DishInOrder
 import edu.mazer.resrec.model.Order
 import edu.mazer.resrec.navigation.NavigationRoutes
 import edu.mazer.resrec.ui.screens.home.components.OrderCard
@@ -27,17 +27,17 @@ fun HomeScreen(navController: NavController) {
         table = 4,
         cost = 785,
         dishes = mutableListOf(
-            Dish(
+            DishInOrder(
                 key = "Картофель фри",
-                value = 2
+                count = 2
             ),
-            Dish(
+            DishInOrder(
                 key = "Кола бол.",
-                value = 2
+                count = 2
             ),
-            Dish(
+            DishInOrder(
                 key = "Гамбургер",
-                value = 2
+                count = 2
             )
         ),
         waiter = "Иванов И.И.",
@@ -64,14 +64,19 @@ fun HomeScreen(navController: NavController) {
                 onClick = { navController.navigate(NavigationRoutes.addOrder.route) },
                 modifier = Modifier.padding(16.dp)
             ) {
-                Icon(imageVector = Icons.Filled.Add, contentDescription = "Add order", modifier = Modifier.size(64.dp))
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = "Add order",
+                    modifier = Modifier.size(64.dp)
+                )
             }
         }
     ) {
-        Column(
-            modifier = Modifier.padding(it)
+        LazyColumn(
+            modifier = Modifier
+                .padding(it)
         ) {
-            OrderCard(testOrder)
+            item { OrderCard(testOrder) }
         }
     }
 }
