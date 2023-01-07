@@ -109,7 +109,7 @@ fun OrderCard(
         if (orderDetailsDialogState.value) {
             order.dishes.forEach { dish ->
                 Text(
-                    text = "${dish.key} x ${dish.count}",
+                    text = "${dish.key} - ${dish.cost}"+ stringResource(id = R.string.rub),
                     modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp)
                 )
             }

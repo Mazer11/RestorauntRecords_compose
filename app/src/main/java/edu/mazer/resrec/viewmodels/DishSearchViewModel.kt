@@ -12,6 +12,7 @@ class DishSearchViewModel : ViewModel() {
     private var showProgressBar: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private var matchedDish: MutableStateFlow<List<MenuItem>> = MutableStateFlow(listOf())
 
+
     val dishSearchModelState = combine(
         searchText,
         matchedDish,

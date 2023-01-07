@@ -1,12 +1,17 @@
 package edu.mazer.resrec.ui.screens.add_order
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -80,7 +85,18 @@ fun AddOrderScreen(
             onConfirm = { /*TODO*/ }) {
             LazyColumn(){
                 items(orderContent){ dish ->
-                    Text(text = "${dish.key} - ${dish.cost}" + stringResource(id = R.string.rub))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(text = "${dish.key} - ${dish.cost}" + stringResource(id = R.string.rub))
+                        IconButton(onClick = { orderContent.remove(dish) }) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Remove dish"
+                            )
+                        }
+                    }
                 }
             }
         }

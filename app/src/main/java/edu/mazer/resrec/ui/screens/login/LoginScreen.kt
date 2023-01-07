@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Man
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -19,19 +20,23 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.mazer.resrec.R
+import edu.mazer.resrec.model.AuthResult
 import edu.mazer.resrec.navigation.NavigationRoutes
+import edu.mazer.resrec.viewmodels.LoginViewModel
 import kotlinx.coroutines.launch
 
 @ExperimentalMaterial3Api
 @Composable
 fun LoginScreen(
     navController: NavController,
+    loginVm: LoginViewModel
 ) {
     val userLogin = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
     val snackBatHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val authResult = loginVm.authResult.observeAsState()
 
     val isUserLoginValid by remember {
         derivedStateOf {
@@ -147,12 +152,19 @@ fun LoginScreen(
                 Button(
                     onClick = {
                         if (isUserLoginValid && isPasswordValid) {
-                            navController.popBackStack()
-                            navController.navigate(route = NavigationRoutes.homeScreen.route,)
+                            loginVm.signIn(userLogin.value, password.value) {
+                                navController.popBackStack()
+                                navController.navigate(route = NavigationRoutes.homeScreen.route)
+                            }
                         } else
                             scope.launch {
                                 snackBatHostState.showSnackbar(errorMessage)
                             }
+                        if (authResult.value is AuthResult.Failure) {
+                            scope.launch {
+                                snackBatHostState.showSnackbar(errorMessage)
+                            }
+                        }
                     },
                 ) {
                     Text(text = stringResource(R.string.signin))
