@@ -6,68 +6,62 @@ import edu.mazer.resrec.model.MenuItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 
-class DishSearchViewModel: ViewModel() {
-    private var allUsers: ArrayList<MenuItem> = ArrayList()
-    private val searchText: MutableStateFlow < String > = MutableStateFlow("")
+class DishSearchViewModel : ViewModel() {
+    private var allDishes: ArrayList<MenuItem> = ArrayList()
+    private val searchText: MutableStateFlow<String> = MutableStateFlow("")
     private var showProgressBar: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    private var matchedUsers: MutableStateFlow<List<MenuItem>> = MutableStateFlow(arrayListOf())
+    private var matchedDish: MutableStateFlow<List<MenuItem>> = MutableStateFlow(arrayListOf())
 
     val dishSearchModelState = combine(
         searchText,
-        matchedUsers,
+        matchedDish,
         showProgressBar
-    ) {
-            text, matchedUsers, showProgress ->
-
-        DishSearchModelState(
-            text,
-            matchedUsers,
-            showProgress
-        )
+    ) { text, matchedUsers, showProgress ->
+        DishSearchModelState(text, matchedUsers, showProgress)
     }
 
     init {
-        retrieveUsers()
+        getMenu()
     }
 
-    fun retrieveUsers() {
-        val users = arrayListOf<MenuItem>(
+    private fun getMenu() {
+        val menu = arrayListOf(
             MenuItem(
-                key = "afwefae",
+                key = "Картофель фри",
                 cost = 150,
-                ingredients = "a f w e f a e"
+                ingredients = "Картофель, соль, растительное масло"
             ),
             MenuItem(
-                key = "herh",
-                cost = 250,
-                ingredients = "aehrhaefhsdgaseegsshsdertjhesdjhdsfhgkjaehblkgfhveasirouhgipouerghipuh"
+                key = "Гамбургер",
+                cost = 350,
+                ingredients = "Говядина, Булочки пшен., Огурцы мар., Кетчуп, Сыр, Лук фри"
             ),
             MenuItem(
-                key = "tlyuulktedy",
-                cost = 50,
-                ingredients = "dtykkkkkkkmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmszassddddddddddddddddwgw"
+                key = "Кола бол.",
+                cost = 75,
+                ingredients = "Кока-кола"
             )
         )
 
-        if (users != null) {
-            allUsers.addAll(users)
+        if (menu != null) {
+            allDishes.addAll(menu)
         }
     }
 
-    fun onSearchTextChanged(changedSearchText: String) {
-        searchText.value = changedSearchText
-        if (changedSearchText.isEmpty()) {
-            matchedUsers.value = arrayListOf()
+    fun onSearchTextChanged(newText: String) {
+        searchText.value = newText
+        if (newText.isEmpty()) {
+            matchedDish.value = arrayListOf()
             return
         }
-        val usersFromSearch = allUsers.filter { item ->
-            item.key.contains(changedSearchText, true)
+        val usersFromSearch = allDishes.filter { item ->
+            item.key.contains(newText, true)
         }
-        matchedUsers.value = usersFromSearch
+        matchedDish.value = usersFromSearch
     }
 
     fun onClearClick() {
         searchText.value = ""
-        matchedUsers.value = arrayListOf()
+        matchedDish.value = arrayListOf()
     }
 }

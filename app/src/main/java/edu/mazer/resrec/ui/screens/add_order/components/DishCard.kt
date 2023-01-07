@@ -18,7 +18,8 @@ import edu.mazer.resrec.R
 
 @Composable
 fun DishCard(
-    dish: MenuItem
+    dish: MenuItem,
+    onPriceClick: () -> Unit
 ) {
 
     Row(
@@ -39,11 +40,13 @@ fun DishCard(
         )
 
         //Name and Ingredients
-        Column() {
+        Column(
+            modifier = Modifier.fillMaxWidth()
+        ) {
             Text(text = dish.key)
             Text(text = dish.ingredients)
             Button(
-                onClick = {/*TODO*/}
+                onClick = { onPriceClick() }
             ) {
                 Text(text = dish.cost.toString() + " " + stringResource(id = R.string.rub))
             }
