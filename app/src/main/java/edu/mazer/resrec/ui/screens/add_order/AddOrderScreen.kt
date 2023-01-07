@@ -9,14 +9,17 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavController
+import edu.mazer.resrec.R
 import edu.mazer.resrec.model.DishSearchModelState
 import edu.mazer.resrec.model.MenuItem
 import edu.mazer.resrec.ui.screens.add_order.components.AddOrderUI
 import edu.mazer.resrec.ui.screens.add_order.components.DishCard
+import edu.mazer.resrec.ui.screens.home.components.OrderConfirmation
 import edu.mazer.resrec.viewmodels.DishSearchViewModel
 import kotlinx.coroutines.flow.Flow
 
@@ -29,6 +32,7 @@ fun AddOrderScreen(
     val dishSearchModelState by rememberFlowWithLifecycle(dishSearchViewModel.dishSearchModelState)
         .collectAsState(initial = DishSearchModelState.Empty)
     val orderContent = remember { mutableStateListOf<MenuItem>() }
+    val showDetailsAlertDialog = remember { mutableStateOf(false) }
 
     AddOrderUI(
         searchText = dishSearchModelState.searchText,
@@ -53,7 +57,7 @@ fun AddOrderScreen(
                             contentDescription = ""
                         )
                     },
-                    onClick = { /*TODO*/ })
+                    onClick = { showDetailsAlertDialog.value = showDetailsAlertDialog.value.not() })
             }
         }
     ) {
@@ -68,6 +72,18 @@ fun AddOrderScreen(
             }
         }
     }
+
+    if (showDetailsAlertDialog.value)
+        OrderConfirmation(
+            title = "Детали заказа",
+            onDismiss = { showDetailsAlertDialog.value = showDetailsAlertDialog.value.not() },
+            onConfirm = { /*TODO*/ }) {
+            LazyColumn(){
+                items(orderContent){ dish ->
+                    Text(text = "${dish.key} - ${dish.cost}" + stringResource(id = R.string.rub))
+                }
+            }
+        }
 }
 
 @Composable
@@ -80,23 +96,4 @@ fun <T> rememberFlowWithLifecycle(
         lifecycle = lifecycle,
         minActiveState = minActiveState
     )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview
-@Composable
-fun buttonWithBadge() {
-
-    BadgedBox(
-        badge = {
-            Badge {
-                Text(text = "3")
-            }
-        }
-    ) {
-        ExtendedFloatingActionButton(
-            text = { Text(text = "Состав заказа") },
-            icon = { Icon(imageVector = Icons.Default.ShoppingCart, contentDescription = "") },
-            onClick = { /*TODO*/ })
-    }
 }

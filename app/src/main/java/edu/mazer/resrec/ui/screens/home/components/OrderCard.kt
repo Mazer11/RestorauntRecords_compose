@@ -148,19 +148,22 @@ fun OrderCard(
 
     if (doneConfirmationDialogState.value)
         OrderConfirmation(
-            orderId = order.id,
             onDismiss = {
                 doneConfirmationDialogState.value = doneConfirmationDialogState.value.not()
             },
-            onConfirm = {}
-        )
+            onConfirm = {},
+            title = stringResource(R.string.confirmation)
+        ) {
+            Text(text = stringResource(R.string.are_you_sure) + order.id + stringResource(R.string.ready_question))
+        }
 }
 
 @Composable
 fun OrderConfirmation(
-    orderId: String,
+    title: String,
     onDismiss: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: () -> Unit,
+    content: @Composable () -> Unit
 ) {
     AlertDialog(
         onDismissRequest = { onDismiss() },
@@ -177,11 +180,7 @@ fun OrderConfirmation(
         icon = {
             Icon(imageVector = Icons.Default.CheckCircle, contentDescription = "Confirmation icon")
         },
-        title = {
-            Text(text = stringResource(R.string.confirmation))
-        },
-        text = {
-            Text(text = stringResource(R.string.are_you_sure) + orderId + stringResource(R.string.ready_question))
-        }
+        title = { Text(text = title) },
+        text = content
     )
 }
