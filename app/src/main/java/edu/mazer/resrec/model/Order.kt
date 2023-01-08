@@ -1,12 +1,11 @@
 package edu.mazer.resrec.model
 
 data class Order(
-    val id: String, //Key from firebase
-    val status: String,
-    val time: String,
-    val table: Int,
-    val cost: Int,
-    val dishes: MutableList<DishInOrder>,
-    val waiter: String,
-    val note: String
+    val status: String = "",
+    val time: String = "",
+    val table: Int = -1,
+    val cost: Int = -1,
+    val dishes: HashMap<String, Int> = HashMap(),
+    val waiter: String = "",
+    val note: String = ""
 )

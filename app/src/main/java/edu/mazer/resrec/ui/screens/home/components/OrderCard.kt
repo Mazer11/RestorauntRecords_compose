@@ -24,7 +24,8 @@ import edu.mazer.resrec.ui.theme.AppTypography
 
 @Composable
 fun OrderCard(
-    order: Order
+    order: Order,
+    onConfirm: () -> Unit
 ) {
 
     val doneConfirmationDialogState = remember { mutableStateOf(false) }
@@ -109,7 +110,7 @@ fun OrderCard(
         if (orderDetailsDialogState.value) {
             order.dishes.forEach { dish ->
                 Text(
-                    text = "${dish.key} - ${dish.cost}"+ stringResource(id = R.string.rub),
+                    text = "${dish.key} - ${dish.value}"+ stringResource(id = R.string.rub),
                     modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp)
                 )
             }
@@ -151,10 +152,10 @@ fun OrderCard(
             onDismiss = {
                 doneConfirmationDialogState.value = doneConfirmationDialogState.value.not()
             },
-            onConfirm = {},
+            onConfirm = onConfirm,
             title = stringResource(R.string.confirmation)
         ) {
-            Text(text = stringResource(R.string.are_you_sure) + order.id + stringResource(R.string.ready_question))
+            Text(text = stringResource(R.string.are_you_sure) + "order.id" + stringResource(R.string.ready_question))
         }
 }
 

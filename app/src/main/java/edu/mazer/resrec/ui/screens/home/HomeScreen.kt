@@ -1,5 +1,6 @@
 package edu.mazer.resrec.ui.screens.home
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -13,8 +14,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import edu.mazer.resrec.model.DishInOrder
-import edu.mazer.resrec.model.Order
 import edu.mazer.resrec.navigation.NavigationRoutes
 import edu.mazer.resrec.ui.screens.home.components.OrderCard
 import edu.mazer.resrec.viewmodels.HomeViewModel
@@ -22,7 +21,6 @@ import edu.mazer.resrec.viewmodels.HomeViewModel
 @ExperimentalMaterial3Api
 @Composable
 fun HomeScreen(navController: NavController, viewModel: HomeViewModel) {
-
     val currentOrders = viewModel.currentOrders.observeAsState()
 
     Scaffold(
@@ -57,9 +55,17 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel) {
             modifier = Modifier
                 .padding(it)
         ) {
+            Log.e("Orders", "LazyColumn()")
             if (currentOrders.value != null)
-                items(currentOrders.value!!) { order ->
-                    OrderCard(order = order)
+                items(currentOrders.value!!) { orderWithId ->
+                    val order = orderWithId.order
+                    val id = orderWithId.id
+                    OrderCard(
+                        order = order!!,
+                        onConfirm = {
+                            viewModel.completeOrder(order, id!!)
+                        }
+                    )
                 }
         }
     }

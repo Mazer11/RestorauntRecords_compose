@@ -1,17 +1,27 @@
 package edu.mazer.resrec.viewmodels
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import edu.mazer.resrec.model.DishSearchModelState
 import edu.mazer.resrec.model.MenuItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 
 class DishSearchViewModel : ViewModel() {
-    private var allDishes: ArrayList<MenuItem> = ArrayList()
     private val searchText: MutableStateFlow<String> = MutableStateFlow("")
     private var showProgressBar: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private var matchedDish: MutableStateFlow<List<MenuItem>> = MutableStateFlow(listOf())
 
+    private val _allDishes = MutableLiveData<MutableList<MenuItem>>()
+    val allDishes: LiveData<MutableList<MenuItem>> = _allDishes
+
+    private val database = Firebase.database
+    val oredersRef = database.getReference("orders")
+    val menuRef = database.getReference("menu")
 
     val dishSearchModelState = combine(
         searchText,
@@ -26,27 +36,7 @@ class DishSearchViewModel : ViewModel() {
     }
 
     private fun getMenu() {
-        val menu = arrayListOf(
-            MenuItem(
-                key = "Картофель фри",
-                cost = 150,
-                ingredients = "Картофель, соль, растительное масло"
-            ),
-            MenuItem(
-                key = "Гамбургер",
-                cost = 350,
-                ingredients = "Говядина, Булочки пшен., Огурцы мар., Кетчуп, Сыр, Лук фри"
-            ),
-            MenuItem(
-                key = "Кола бол.",
-                cost = 75,
-                ingredients = "Кока-кола"
-            )
-        )
 
-        if (menu != null) {
-            allDishes.addAll(menu)
-        }
     }
 
     fun onSearchTextChanged(newText: String) {
@@ -55,7 +45,7 @@ class DishSearchViewModel : ViewModel() {
             matchedDish.value = arrayListOf()
             return
         }
-        val usersFromSearch = allDishes.filter { item ->
+        val usersFromSearch = _allDishes.value!!.filter { item ->
             item.key.contains(newText, true)
         }
         matchedDish.value = usersFromSearch
