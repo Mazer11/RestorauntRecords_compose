@@ -5,17 +5,16 @@ import androidx.compose.runtime.mutableStateOf
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class ResRecApp: Application() {
+class ResRecApp : Application() {
     val isDarkTheme = mutableStateOf(false)
 
     fun getAppThemeFromDataStore(
         themeValue: Boolean
-    ){
+    ) {
         isDarkTheme.value = themeValue
     }
 
-    fun switchAppTheme(){
+    fun switchAppTheme() {
         isDarkTheme.value = !isDarkTheme.value
     }
-
 }

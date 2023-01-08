@@ -1,6 +1,5 @@
 package edu.mazer.resrec.ui.screens.home
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -27,20 +26,20 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel) {
         modifier = Modifier.fillMaxSize(),
         topBar = {
             HomeTopApp(
-                title = "Имя пользователя",
+                title = viewModel.getUserName(),
                 onIconButtonClick = {
-                    navController.navigate(NavigationRoutes.settingsScreen.route)
+                    navController.navigate(NavigationRoutes.SETTINGS.route)
                 },
                 onNavigationButtonClick = {
                     viewModel.signOut()
                     navController.popBackStack()
-                    navController.navigate(NavigationRoutes.loginScreen.route)
+                    navController.navigate(NavigationRoutes.LOGIN.route)
                 }
             )
         },
         floatingActionButton = {
             LargeFloatingActionButton(
-                onClick = { navController.navigate(NavigationRoutes.addOrder.route) },
+                onClick = { navController.navigate(NavigationRoutes.ADDORDER.route) },
                 modifier = Modifier.padding(16.dp)
             ) {
                 Icon(
@@ -55,7 +54,6 @@ fun HomeScreen(navController: NavController, viewModel: HomeViewModel) {
             modifier = Modifier
                 .padding(it)
         ) {
-            Log.e("Orders", "LazyColumn()")
             if (currentOrders.value != null)
                 items(currentOrders.value!!) { orderWithId ->
                     val order = orderWithId.order

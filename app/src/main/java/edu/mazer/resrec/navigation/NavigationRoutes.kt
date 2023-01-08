@@ -4,9 +4,9 @@ sealed class NavigationRoutes(
     val route: String
 ) {
 
-    object loginScreen : NavigationRoutes(route = "login")
-    object homeScreen : NavigationRoutes(route = "home")
-    object settingsScreen : NavigationRoutes(route = "settings")
-    object addOrder : NavigationRoutes(route = "add_order")
+    object LOGIN : NavigationRoutes(route = "login")
+    object HOME : NavigationRoutes(route = "home")
+    object SETTINGS : NavigationRoutes(route = "settings")
+    object ADDORDER : NavigationRoutes(route = "add_order")
 
 }

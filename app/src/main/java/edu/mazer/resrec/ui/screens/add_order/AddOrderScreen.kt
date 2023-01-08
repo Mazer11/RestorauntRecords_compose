@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ShoppingCart
@@ -35,7 +34,6 @@ import androidx.navigation.NavController
 import edu.mazer.resrec.R
 import edu.mazer.resrec.model.DishSearchModelState
 import edu.mazer.resrec.model.MenuItem
-import edu.mazer.resrec.model.Order
 import edu.mazer.resrec.ui.screens.add_order.components.AddOrderUI
 import edu.mazer.resrec.ui.screens.add_order.components.DishCard
 import edu.mazer.resrec.ui.screens.home.components.OrderConfirmation
@@ -55,7 +53,6 @@ fun AddOrderScreen(
     val showDetailsAlertDialog = remember { mutableStateOf(false) }
     val tableNumber = remember { mutableStateOf(0) }
     val clientNote = remember { mutableStateOf("") }
-    val focusManager = LocalFocusManager.current
     val showClearButtonToTable = remember { derivedStateOf { tableNumber.value > 0 } }
     val showClearButtonToNote = remember { derivedStateOf { clientNote.value.isNotEmpty() } }
     val isOrderFormCorrect = remember {
@@ -68,7 +65,7 @@ fun AddOrderScreen(
     AddOrderUI(
         searchText = dishSearchModelState.searchText,
         matchesFound = dishSearchModelState.dishes.isNotEmpty(),
-        placeholderText = "Поиск",
+        placeholderText = stringResource(R.string.search),
         onSearchTextChanged = { dishSearchViewModel.onSearchTextChanged(it) },
         onClearClick = { dishSearchViewModel.onClearClick() },
         onNavigateBack = { navController.navigateUp() },
@@ -81,14 +78,18 @@ fun AddOrderScreen(
                 }
             ) {
                 ExtendedFloatingActionButton(
-                    text = { Text(text = "Состав заказа") },
+                    text = { Text(text = stringResource(R.string.order_content)) },
                     icon = {
                         Icon(
                             imageVector = Icons.Default.ShoppingCart,
                             contentDescription = ""
                         )
                     },
-                    onClick = { showDetailsAlertDialog.value = showDetailsAlertDialog.value.not() })
+                    onClick = {
+                        if (!orderContent.isEmpty())
+                            showDetailsAlertDialog.value = showDetailsAlertDialog.value.not()
+                    }
+                )
             }
         }
     ) {
@@ -104,9 +105,10 @@ fun AddOrderScreen(
         }
     }
 
-    if (showDetailsAlertDialog.value)
+    if (showDetailsAlertDialog.value) {
+        val errorMsg = stringResource(R.string.new_order_error)
         OrderConfirmation(
-            title = "Детали заказа",
+            title = stringResource(R.string.order_details),
             onDismiss = { showDetailsAlertDialog.value = showDetailsAlertDialog.value.not() },
             onConfirm = {
                 if (isOrderFormCorrect.value) {
@@ -117,17 +119,20 @@ fun AddOrderScreen(
                     )
                     showDetailsAlertDialog.value = showDetailsAlertDialog.value.not()
                 } else {
-                    Toast.makeText(lContext, "Note/Table is wrong", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(lContext, errorMsg, Toast.LENGTH_SHORT).show()
                 }
             }) {
 
-            LazyColumn() {
+            LazyColumn {
                 item {
+
+                    val focusManager = LocalFocusManager.current
+
                     //Table
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(text = "Номер столика")
+                        Text(text = stringResource(R.string.table_number))
 
                         OutlinedTextField(
                             value = tableNumber.value.toString(),
@@ -135,7 +140,7 @@ fun AddOrderScreen(
                             maxLines = 1,
                             isError = showClearButtonToTable.value.not(),
                             onValueChange = { tableNumber.value = it.toInt() },
-                            placeholder = { Text(text = "Номер столика") },
+                            placeholder = { Text(text = stringResource(R.string.table_number)) },
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Number,
                                 imeAction = ImeAction.Next
@@ -168,7 +173,7 @@ fun AddOrderScreen(
                         maxLines = 1,
                         isError = showClearButtonToNote.value.not(),
                         onValueChange = { clientNote.value = it },
-                        placeholder = { Text(text = "Примечание") },
+                        placeholder = { Text(text = stringResource(R.string.note)) },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Ascii,
                             imeAction = ImeAction.Done
@@ -196,7 +201,11 @@ fun AddOrderScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(text = "${dish.key} - ${dish.menuItemValues.cost}" + stringResource(id = R.string.rub))
-                        IconButton(onClick = { orderContent.remove(dish) }) {
+                        IconButton(onClick = {
+                            orderContent.remove(dish)
+                            if (orderContent.size == 0)
+                                showDetailsAlertDialog.value = showDetailsAlertDialog.value.not()
+                        }) {
                             Icon(
                                 imageVector = Icons.Default.Delete,
                                 contentDescription = "Remove dish"
@@ -206,6 +215,7 @@ fun AddOrderScreen(
                 }
             }
         }
+    }
 }
 
 @Composable

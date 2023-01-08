@@ -70,7 +70,7 @@ fun OrderCard(
                     style = AppTypography.titleLarge
                 )
                 Text(
-                    text = "${order.cost}" + stringResource(R.string.rub),
+                    text = "${order.cost}" + " " + stringResource(R.string.rub),
                     style = AppTypography.titleLarge
                 )
             }
@@ -100,7 +100,7 @@ fun OrderCard(
                 )
         }
         Text(
-            text = stringResource(R.string.note) + " " + order.note,
+            text = stringResource(R.string.note_with_dots) + " " + order.note,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
@@ -110,7 +110,7 @@ fun OrderCard(
         if (orderDetailsDialogState.value) {
             order.dishes.forEach { dish ->
                 Text(
-                    text = "${dish.key} - ${dish.value}"+ stringResource(id = R.string.rub),
+                    text = "${dish.key} x ${dish.value}",
                     modifier = Modifier.padding(vertical = 4.dp, horizontal = 16.dp)
                 )
             }
@@ -152,10 +152,16 @@ fun OrderCard(
             onDismiss = {
                 doneConfirmationDialogState.value = doneConfirmationDialogState.value.not()
             },
-            onConfirm = onConfirm,
+            onConfirm = {
+                onConfirm()
+                doneConfirmationDialogState.value = doneConfirmationDialogState.value.not()
+            },
             title = stringResource(R.string.confirmation)
         ) {
-            Text(text = stringResource(R.string.are_you_sure) + "order.id" + stringResource(R.string.ready_question))
+            Text(
+                text = stringResource(R.string.are_you_sure) + " "
+                        + order.table + "" + stringResource(R.string.ready_question)
+            )
         }
 }
 

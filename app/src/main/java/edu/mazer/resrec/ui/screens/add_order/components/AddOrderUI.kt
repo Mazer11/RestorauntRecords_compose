@@ -13,11 +13,13 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
+import edu.mazer.resrec.R
+import edu.mazer.resrec.ui.theme.AppTypography
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -39,10 +41,8 @@ fun AddOrderUI(
         topBar = {
             TopAppBar(
                 title = {
-                    OutlinedTextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 2.dp),
+                    TextField(
+                        modifier = Modifier.fillMaxWidth(),
                         value = searchText,
                         onValueChange = {
                             onSearchTextChanged(it)
@@ -52,6 +52,7 @@ fun AddOrderUI(
                         leadingIcon = {
                             Icon(imageVector = Icons.Default.Search, contentDescription = "")
                         },
+                        textStyle = AppTypography.bodyMedium,
                         trailingIcon = {
                             AnimatedVisibility(
                                 visible = showClearButton, enter = fadeIn(), exit = fadeOut()
@@ -78,12 +79,13 @@ fun AddOrderUI(
                         )
                     }
                 },
+                modifier = Modifier.padding(top = 4.dp)
             )
         },
         floatingActionButton = {
             floatingAB()
         },
-        floatingActionButtonPosition = FabPosition.Center
+        floatingActionButtonPosition = FabPosition.Center,
     ) {
         Box(
             modifier = Modifier
@@ -105,6 +107,6 @@ fun NoSearchResults() {
         modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center,
         horizontalAlignment = CenterHorizontally
     ) {
-        Text(text = "Совпадений не найдено")
+        Text(text = stringResource(R.string.matches_not_found))
     }
 }

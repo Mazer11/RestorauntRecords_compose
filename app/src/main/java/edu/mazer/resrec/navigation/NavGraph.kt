@@ -2,7 +2,6 @@ package edu.mazer.resrec.navigation
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -24,27 +23,27 @@ fun NavGraph(
 ) {
     val myAuth = FirebaseAuth.getInstance()
     val startDest = if (myAuth.currentUser != null)
-        NavigationRoutes.homeScreen.route
+        NavigationRoutes.HOME.route
     else
-        NavigationRoutes.loginScreen.route
+        NavigationRoutes.LOGIN.route
 
     NavHost(navController = navController, startDestination = startDest) {
         composable(
-            route = NavigationRoutes.loginScreen.route
+            route = NavigationRoutes.LOGIN.route
         ) {
             val loginVm = LoginViewModel()
             LoginScreen(navController, loginVm)
         }
 
         composable(
-            route = NavigationRoutes.homeScreen.route
+            route = NavigationRoutes.HOME.route
         ) {
             val homeVm = HomeViewModel()
             HomeScreen(navController, homeVm)
         }
 
         composable(
-            route = NavigationRoutes.settingsScreen.route
+            route = NavigationRoutes.SETTINGS.route
         ) {
             SettingsScreen(
                 navController,
@@ -53,7 +52,7 @@ fun NavGraph(
         }
 
         composable(
-            route = NavigationRoutes.addOrder.route
+            route = NavigationRoutes.ADDORDER.route
         ) {
             val dishVm = AddOrderViewModel()
             AddOrderScreen(
@@ -62,11 +61,4 @@ fun NavGraph(
             )
         }
     }
-}
-
-fun checkAuthState(
-    navController: NavController,
-    auth: FirebaseAuth
-) {
-
 }

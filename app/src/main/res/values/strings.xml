@@ -5,16 +5,23 @@
     <string name="password">Пароль</string>
     <string name="username">Имя пользователя</string>
     <string name="rub">руб.</string>
-    <string name="note">Примечание: </string>
+    <string name="note_with_dots">Примечание: </string>
     <string name="hide_details">Свернуть</string>
     <string name="show_details">Раскрыть</string>
     <string name="done">Готово</string>
     <string name="confirm">Подтвердить</string>
     <string name="cancel">Отменить</string>
     <string name="confirmation">Подтверждение</string>
-    <string name="are_you_sure">Вы уверены, что заказ №</string>
+    <string name="are_you_sure">Вы уверены, что заказ столика</string>
     <string name="ready_question">завершён?</string>
     <string name="settings">Настройки</string>
     <string name="darkmode_enable">Включить ночной режим</string>
     <string name="language">Язык интерфейса</string>
+    <string name="matches_not_found">Совпадений не найдено</string>
+    <string name="note">Примечание</string>
+    <string name="table_number">Номер столика</string>
+    <string name="new_order_error">Примечания/номер столика не верны</string>
+    <string name="order_details">Детали заказа</string>
+    <string name="order_content">Состав заказа</string>
+    <string name="search">Поиск</string>
 </resources>

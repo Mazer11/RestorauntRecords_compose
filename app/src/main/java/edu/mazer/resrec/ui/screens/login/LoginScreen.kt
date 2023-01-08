@@ -1,10 +1,13 @@
 package edu.mazer.resrec.ui.screens.login
 
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Man
 import androidx.compose.material.icons.filled.Password
 import androidx.compose.material3.*
@@ -37,6 +40,9 @@ fun LoginScreen(
     val snackBatHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val authResult = loginVm.authResult.observeAsState()
+
+    val showClearToLogin = remember{ derivedStateOf { userLogin.value.isNotEmpty() }}
+    val showClearToPassword = remember{ derivedStateOf { password.value.isNotEmpty() }}
 
     val isUserLoginValid by remember {
         derivedStateOf {
@@ -99,6 +105,18 @@ fun LoginScreen(
                     leadingIcon = {
                         Icon(imageVector = Icons.Default.Man, contentDescription = "Login")
                     },
+                    trailingIcon = {
+                        androidx.compose.animation.AnimatedVisibility(
+                            visible = showClearToLogin.value, enter = fadeIn(), exit = fadeOut()
+                        ) {
+                            IconButton(onClick = { userLogin.value = "" }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Close,
+                                    contentDescription = ""
+                                )
+                            }
+                        }
+                    },
                     label = {
                         Text(stringResource(R.string.username))
                     },
@@ -128,6 +146,18 @@ fun LoginScreen(
                     leadingIcon = {
                         Icon(imageVector = Icons.Default.Password, contentDescription = "Password")
                     },
+                    trailingIcon = {
+                        androidx.compose.animation.AnimatedVisibility(
+                            visible = showClearToPassword.value, enter = fadeIn(), exit = fadeOut()
+                        ) {
+                            IconButton(onClick = { password.value = "" }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Close,
+                                    contentDescription = ""
+                                )
+                            }
+                        }
+                    },
                     label = {
                         Text(stringResource(R.string.password))
                     },
@@ -154,7 +184,7 @@ fun LoginScreen(
                         if (isUserLoginValid && isPasswordValid) {
                             loginVm.signIn(userLogin.value, password.value) {
                                 navController.popBackStack()
-                                navController.navigate(route = NavigationRoutes.homeScreen.route)
+                                navController.navigate(route = NavigationRoutes.HOME.route)
                             }
                         } else
                             scope.launch {

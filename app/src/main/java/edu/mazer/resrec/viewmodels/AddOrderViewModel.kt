@@ -1,7 +1,6 @@
 package edu.mazer.resrec.viewmodels
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -24,15 +23,13 @@ class AddOrderViewModel : ViewModel() {
     private val searchText: MutableStateFlow<String> = MutableStateFlow("")
     private var showProgressBar: MutableStateFlow<Boolean> = MutableStateFlow(false)
     private var matchedDish: MutableStateFlow<List<MenuItem>> = MutableStateFlow(listOf())
-
     private val _allDishes = MutableLiveData<MutableList<MenuItem>>()
-    val allDishes: LiveData<MutableList<MenuItem>> = _allDishes
 
-    val user = FirebaseAuth.getInstance().currentUser
+    private val user = FirebaseAuth.getInstance().currentUser
     private val database =
         Firebase.database("https://kursovaya-5fdc1-default-rtdb.europe-west1.firebasedatabase.app/")
-    val ordersRef = database.getReference("orders")
-    val menuRef = database.getReference("menu")
+    private val ordersRef = database.getReference("orders")
+    private val menuRef = database.getReference("menu")
 
     val dishSearchModelState = combine(
         searchText,
@@ -90,12 +87,17 @@ class AddOrderViewModel : ViewModel() {
         val time = timeFormat.format(Date())
         val status = "Готовится"
 
-        var cost = -1
+        var cost = 0
         val dishes = hashMapOf<String, Int>()
         clientDishes.forEach { item ->
             cost += item.menuItemValues.cost
             /*TODO multiply same dishes*/
-            dishes[item.key] = item.menuItemValues.cost
+            if (dishes.containsKey(item.key)) {
+                val oldValue = dishes[item.key]
+                dishes[item.key] = oldValue!! + 1
+            }
+            else
+                dishes[item.key] = 1
         }
 
         //Key
@@ -116,7 +118,7 @@ class AddOrderViewModel : ViewModel() {
         putOrderToFirestore(order, key)
     }
 
-    fun putOrderToFirestore(
+    private fun putOrderToFirestore(
         order: Order,
         key: String
     ) {

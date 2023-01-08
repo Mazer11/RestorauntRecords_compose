@@ -31,7 +31,8 @@ class MainActivity : ComponentActivity() {
             val context = LocalContext.current
             val datastore = DataStoreRepo(context)
 
-            val themeValue = datastore.readThemeFromDataStore.collectAsState(initial = isSystemInDarkTheme())
+            val themeValue =
+                datastore.readThemeFromDataStore.collectAsState(initial = isSystemInDarkTheme())
             application.getAppThemeFromDataStore(themeValue.value)
             val appLocale = datastore.readLocaleFromDataStore.collectAsState(initial = "en")
 
