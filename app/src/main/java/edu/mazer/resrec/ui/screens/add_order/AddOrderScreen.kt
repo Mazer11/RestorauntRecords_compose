@@ -1,19 +1,34 @@
 package edu.mazer.resrec.ui.screens.add_order
 
+import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.navigation.NavController
@@ -33,10 +48,22 @@ fun AddOrderScreen(
     navController: NavController,
     dishSearchViewModel: AddOrderViewModel
 ) {
+    val lContext = LocalContext.current
     val dishSearchModelState by rememberFlowWithLifecycle(dishSearchViewModel.dishSearchModelState)
         .collectAsState(initial = DishSearchModelState.Empty)
     val orderContent = remember { mutableStateListOf<MenuItem>() }
     val showDetailsAlertDialog = remember { mutableStateOf(false) }
+    val tableNumber = remember { mutableStateOf(0) }
+    val clientNote = remember { mutableStateOf("") }
+    val focusManager = LocalFocusManager.current
+    val showClearButtonToTable = remember { derivedStateOf { tableNumber.value > 0 } }
+    val showClearButtonToNote = remember { derivedStateOf { clientNote.value.isNotEmpty() } }
+    val isOrderFormCorrect = remember {
+        derivedStateOf {
+            clientNote.value.isNotEmpty() &&
+                    tableNumber.value > 0
+        }
+    }
 
     AddOrderUI(
         searchText = dishSearchModelState.searchText,
@@ -82,11 +109,88 @@ fun AddOrderScreen(
             title = "Детали заказа",
             onDismiss = { showDetailsAlertDialog.value = showDetailsAlertDialog.value.not() },
             onConfirm = {
-                dishSearchViewModel.onConfirmOrder(orderContent, 1, null)
-                showDetailsAlertDialog.value = showDetailsAlertDialog.value.not()
+                if (isOrderFormCorrect.value) {
+                    dishSearchViewModel.onConfirmOrder(
+                        orderContent,
+                        tableNumber.value,
+                        clientNote.value
+                    )
+                    showDetailsAlertDialog.value = showDetailsAlertDialog.value.not()
+                } else {
+                    Toast.makeText(lContext, "Note/Table is wrong", Toast.LENGTH_SHORT).show()
+                }
             }) {
-            LazyColumn(){
-                items(orderContent){ dish ->
+
+            LazyColumn() {
+                item {
+                    //Table
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(text = "Номер столика")
+
+                        OutlinedTextField(
+                            value = tableNumber.value.toString(),
+                            singleLine = true,
+                            maxLines = 1,
+                            isError = showClearButtonToTable.value.not(),
+                            onValueChange = { tableNumber.value = it.toInt() },
+                            placeholder = { Text(text = "Номер столика") },
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Next
+                            ),
+                            keyboardActions = KeyboardActions(
+                                onNext = { focusManager.moveFocus(FocusDirection.Next) }
+                            ),
+                            trailingIcon = {
+                                AnimatedVisibility(
+                                    visible = showClearButtonToTable.value,
+                                    enter = fadeIn(),
+                                    exit = fadeOut()
+                                ) {
+                                    IconButton(onClick = { tableNumber.value = 0 }) {
+                                        Icon(
+                                            imageVector = Icons.Default.Close,
+                                            contentDescription = ""
+                                        )
+                                    }
+                                }
+                            },
+                            modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+                        )
+                    }
+
+                    //Note
+                    OutlinedTextField(
+                        value = clientNote.value,
+                        singleLine = true,
+                        maxLines = 1,
+                        isError = showClearButtonToNote.value.not(),
+                        onValueChange = { clientNote.value = it },
+                        placeholder = { Text(text = "Примечание") },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Ascii,
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onDone = { focusManager.clearFocus() }
+                        ),
+                        trailingIcon = {
+                            AnimatedVisibility(
+                                visible = showClearButtonToNote.value,
+                                enter = fadeIn(),
+                                exit = fadeOut()
+                            ) {
+                                IconButton(onClick = { clientNote.value = "" }) {
+                                    Icon(imageVector = Icons.Default.Close, contentDescription = "")
+                                }
+                            }
+                        },
+                        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+                    )
+                }
+                items(orderContent) { dish ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.SpaceBetween
