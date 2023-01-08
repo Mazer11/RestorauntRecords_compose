@@ -6,14 +6,13 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.google.android.gms.auth.api.Auth
 import com.google.firebase.auth.FirebaseAuth
 import edu.mazer.resrec.ResRecApp
 import edu.mazer.resrec.ui.screens.add_order.AddOrderScreen
 import edu.mazer.resrec.ui.screens.home.HomeScreen
 import edu.mazer.resrec.ui.screens.login.LoginScreen
 import edu.mazer.resrec.ui.screens.settings.SettingsScreen
-import edu.mazer.resrec.viewmodels.DishSearchViewModel
+import edu.mazer.resrec.viewmodels.AddOrderViewModel
 import edu.mazer.resrec.viewmodels.HomeViewModel
 import edu.mazer.resrec.viewmodels.LoginViewModel
 
@@ -56,7 +55,7 @@ fun NavGraph(
         composable(
             route = NavigationRoutes.addOrder.route
         ) {
-            val dishVm = DishSearchViewModel()
+            val dishVm = AddOrderViewModel()
             AddOrderScreen(
                 navController,
                 dishVm

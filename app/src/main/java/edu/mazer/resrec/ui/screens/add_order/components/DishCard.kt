@@ -44,11 +44,11 @@ fun DishCard(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = dish.key)
-            Text(text = dish.ingredients)
+            Text(text = dish.menuItemValues.ingredient)
             Button(
                 onClick = { onPriceClick() }
             ) {
-                Text(text = dish.cost.toString() + " " + stringResource(id = R.string.rub))
+                Text(text = dish.menuItemValues.cost.toString() + " " + stringResource(id = R.string.rub))
             }
         }
     }
