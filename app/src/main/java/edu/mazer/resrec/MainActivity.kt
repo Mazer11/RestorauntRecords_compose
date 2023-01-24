@@ -1,12 +1,14 @@
 package edu.mazer.resrec
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,8 +33,7 @@ class MainActivity : ComponentActivity() {
             val context = LocalContext.current
             val datastore = DataStoreRepo(context)
 
-            val themeValue =
-                datastore.readThemeFromDataStore.collectAsState(initial = isSystemInDarkTheme())
+            val themeValue = datastore.readThemeFromDataStore.collectAsState(initial = true)
             application.getAppThemeFromDataStore(themeValue.value)
             val appLocale = datastore.readLocaleFromDataStore.collectAsState(initial = "en")
 

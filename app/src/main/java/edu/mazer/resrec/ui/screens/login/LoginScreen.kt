@@ -7,9 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Man
-import androidx.compose.material.icons.filled.Password
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -20,6 +18,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import edu.mazer.resrec.R
@@ -41,8 +41,15 @@ fun LoginScreen(
     val scope = rememberCoroutineScope()
     val authResult = loginVm.authResult.observeAsState()
 
-    val showClearToLogin = remember{ derivedStateOf { userLogin.value.isNotEmpty() }}
-    val showClearToPassword = remember{ derivedStateOf { password.value.isNotEmpty() }}
+    val showClearToLogin = remember { derivedStateOf { userLogin.value.isNotEmpty() } }
+    val showPassword = remember { derivedStateOf { password.value.isNotEmpty() } }
+    val passwordVisibility = remember { mutableStateOf(false) }
+    val passwordIcon =
+        if (!passwordVisibility.value) Icons.Filled.Visibility
+        else Icons.Filled.VisibilityOff
+    val passwordMask =
+        if (!passwordVisibility.value) PasswordVisualTransformation('*')
+        else VisualTransformation.None
 
     val isUserLoginValid by remember {
         derivedStateOf {
@@ -146,13 +153,16 @@ fun LoginScreen(
                     leadingIcon = {
                         Icon(imageVector = Icons.Default.Password, contentDescription = "Password")
                     },
+                    visualTransformation = passwordMask,
                     trailingIcon = {
                         androidx.compose.animation.AnimatedVisibility(
-                            visible = showClearToPassword.value, enter = fadeIn(), exit = fadeOut()
+                            visible = showPassword.value, enter = fadeIn(), exit = fadeOut()
                         ) {
-                            IconButton(onClick = { password.value = "" }) {
+                            IconButton(onClick = {
+                                passwordVisibility.value = !passwordVisibility.value
+                            }) {
                                 Icon(
-                                    imageVector = Icons.Filled.Close,
+                                    imageVector = passwordIcon,
                                     contentDescription = ""
                                 )
                             }

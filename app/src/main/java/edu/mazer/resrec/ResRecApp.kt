@@ -6,15 +6,15 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class ResRecApp : Application() {
-    val isDarkTheme = mutableStateOf(false)
+    var isDarkTheme = false
 
     fun getAppThemeFromDataStore(
         themeValue: Boolean
     ) {
-        isDarkTheme.value = themeValue
+        isDarkTheme = themeValue
     }
 
     fun switchAppTheme() {
-        isDarkTheme.value = !isDarkTheme.value
+        isDarkTheme = !isDarkTheme
     }
 }

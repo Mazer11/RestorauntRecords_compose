@@ -40,7 +40,7 @@ class DataStoreRepo(
             }
         }
         .map { preferences ->
-            val theme = preferences[PreferenceKey.theme_key] ?: false
+            val theme = preferences[PreferenceKey.theme_key] ?: true
             theme
         }
 
@@ -54,7 +54,7 @@ class DataStoreRepo(
             }
         }
         .map { preferences ->
-            val locale = preferences[PreferenceKey.locale_key] ?: "ru"
+            val locale = preferences[PreferenceKey.locale_key] ?: "en"
             locale
         }
 

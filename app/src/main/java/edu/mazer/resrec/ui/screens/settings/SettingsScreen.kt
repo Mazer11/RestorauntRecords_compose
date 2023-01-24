@@ -32,13 +32,13 @@ fun SettingsScreen(
     val scope = rememberCoroutineScope()
     val datastore = DataStoreRepo(context)
 
-    var locale = datastore.readLocaleFromDataStore.collectAsState(initial = "").value
+    val locale = datastore.readLocaleFromDataStore.collectAsState(initial = "en")
     var localeName by remember { mutableStateOf("") }
     var expandDropDownMenu by remember { mutableStateOf(false) }
 
     val isDarkTheme = app.isDarkTheme
 
-    localeName = when (locale) {
+    localeName = when (locale.value) {
         "en" -> {
             ChangeLocale(lang = "en")
             "English"
@@ -54,7 +54,7 @@ fun SettingsScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             SettingsTopAppBar(
-                locale = locale,
+                locale = locale.value,
                 onBackPressed = {
                     navController.popBackStack()
                 }
@@ -76,7 +76,7 @@ fun SettingsScreen(
                     modifier = Modifier.padding(top = 8.dp)
                 )
                 Switch(
-                    checked = isDarkTheme.value,
+                    checked = isDarkTheme,
                     onCheckedChange = {
                         app.switchAppTheme()
                         scope.launch {
@@ -121,7 +121,6 @@ fun SettingsScreen(
                             scope.launch {
                                 datastore.editLocalePreference("en")
                             }
-                            locale = "en"
                             localeName = "English"
                         }
                     )
@@ -131,7 +130,6 @@ fun SettingsScreen(
                             scope.launch {
                                 datastore.editLocalePreference("ru")
                             }
-                            locale = "ru"
                             localeName = "Русский"
                         }
                     )

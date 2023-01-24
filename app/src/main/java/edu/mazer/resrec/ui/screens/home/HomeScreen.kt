@@ -22,6 +22,7 @@ import edu.mazer.resrec.viewmodels.HomeViewModel
 fun HomeScreen(navController: NavController, viewModel: HomeViewModel) {
     val currentOrders = viewModel.currentOrders.observeAsState()
 
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
