@@ -68,20 +68,7 @@ class HomeViewModel : ViewModel() {
         val simpleDate = SimpleDateFormat("yyyy_MM_dd_HH_mm")
         val date = simpleDate.format(Date())
         completeOrdersRef.child(uid + date).setValue(order)
-        Log.e("TAG", id)
         ordersRef.child(id).removeValue()
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-

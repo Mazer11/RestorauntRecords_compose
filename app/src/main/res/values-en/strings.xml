@@ -21,7 +21,7 @@
     <string name="matches_not_found">Matches not found</string>
     <string name="note">Note</string>
     <string name="table_number">Table number</string>
-    <string name="new_order_error">Note/Table is wrong</string>
+    <string name="new_order_error">Table is wrong</string>
     <string name="order_details">Order details</string>
     <string name="order_content">Order content</string>
     <string name="search">Search</string>

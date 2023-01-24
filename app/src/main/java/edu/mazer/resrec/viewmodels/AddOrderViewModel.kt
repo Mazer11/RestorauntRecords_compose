@@ -83,7 +83,7 @@ class AddOrderViewModel : ViewModel() {
         clientTable: Int,
         clientNote: String?
     ) {
-        val timeFormat = SimpleDateFormat("HH:mm")
+        val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         val time = timeFormat.format(Date())
         val status = "Готовится"
 
@@ -91,7 +91,6 @@ class AddOrderViewModel : ViewModel() {
         val dishes = hashMapOf<String, Int>()
         clientDishes.forEach { item ->
             cost += item.menuItemValues.cost
-            /*TODO multiply same dishes*/
             if (dishes.containsKey(item.key)) {
                 val oldValue = dishes[item.key]
                 dishes[item.key] = oldValue!! + 1
@@ -125,23 +124,3 @@ class AddOrderViewModel : ViewModel() {
         ordersRef.child(key).setValue(order)
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

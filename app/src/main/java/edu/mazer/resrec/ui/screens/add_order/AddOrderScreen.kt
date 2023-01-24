@@ -55,12 +55,7 @@ fun AddOrderScreen(
     val clientNote = remember { mutableStateOf("") }
     val showClearButtonToTable = remember { derivedStateOf { tableNumber.value > 0 } }
     val showClearButtonToNote = remember { derivedStateOf { clientNote.value.isNotEmpty() } }
-    val isOrderFormCorrect = remember {
-        derivedStateOf {
-            clientNote.value.isNotEmpty() &&
-                    tableNumber.value > 0
-        }
-    }
+    val isOrderFormCorrect = remember { derivedStateOf { tableNumber.value > 0 } }
 
     AddOrderUI(
         searchText = dishSearchModelState.searchText,
@@ -171,7 +166,6 @@ fun AddOrderScreen(
                         value = clientNote.value,
                         singleLine = true,
                         maxLines = 1,
-                        isError = showClearButtonToNote.value.not(),
                         onValueChange = { clientNote.value = it },
                         placeholder = { Text(text = stringResource(R.string.note)) },
                         keyboardOptions = KeyboardOptions(

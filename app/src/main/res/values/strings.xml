@@ -20,7 +20,7 @@
     <string name="matches_not_found">Совпадений не найдено</string>
     <string name="note">Примечание</string>
     <string name="table_number">Номер столика</string>
-    <string name="new_order_error">Примечания/номер столика не верны</string>
+    <string name="new_order_error">Номер столика не верен</string>
     <string name="order_details">Детали заказа</string>
     <string name="order_content">Состав заказа</string>
     <string name="search">Поиск</string>
